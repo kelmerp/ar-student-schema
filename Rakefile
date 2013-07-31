@@ -3,6 +3,11 @@ require 'rspec/core/rake_task'
 require_relative 'db/config'
 require_relative 'lib/students_importer'
 
+desc "run interactive rake console"
+task "console" do
+  exec "irb -r./app/models/student.rb"
+end
+
 
 desc "create the database"
 task "db:create" do

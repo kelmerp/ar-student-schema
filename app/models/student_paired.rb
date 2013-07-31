@@ -1,14 +1,15 @@
 require_relative '../../db/config'
 
 class Student < ActiveRecord::Base
-# implement your Student model 
-
+# implement your Student model here
   def name
-    "#{self.first_name} #{self.last_name}"
+    student = Student.find(self.id)
+    "#{student.first_name} #{student.last_name}"
   end
 
   def age
-    (Time.now - self.birthday.to_time).to_i / (3600 * 24 * 365)
+    student = Student.find(self.id)
+    (Time.now - student.birthday.to_time).to_i / (3600 * 24 * 365)
   end
  
 end

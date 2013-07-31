@@ -8,7 +8,8 @@ class Student < ActiveRecord::Base
   end
 
   def age
-    (Time.now - self.birthday.to_time).to_i / (3600 * 24 * 365)
+    student = Student.find(self.id)
+    (Time.now - student.birthday.to_time).to_i / (3600 * 24 * 365)
   end
  
 end
