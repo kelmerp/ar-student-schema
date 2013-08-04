@@ -2,12 +2,13 @@ require 'rake'
 require 'rspec/core/rake_task'
 require_relative 'db/config'
 require_relative 'lib/students_importer'
+require_relative 'lib/teachers_importer.rb'
+require_relative 'lib/create_associations.rb'
 
 desc "run interactive rake console"
 task "console" do
-  exec "irb -r./app/models/student.rb"
+  exec "irb -r./app/models/student -r./app/models/teacher -r./app/models/course"
 end
-
 
 desc "create the database"
 task "db:create" do
@@ -31,11 +32,32 @@ end
 desc "populate the test database with sample data"
 task "db:populate" do
   StudentsImporter.import
+  TeachersImporter.import
+end
+
+desc "populate the test database with Faker teacher data"
+task "db:teacher_pop" do
+  StudentsImporter.import
+end
+
+desc "populate the test database with Faker teacher data"
+task "db:student_pop" do
+  TeachersImporter.import
+end
+
+desc "associate each student with a teacher"
+task "db:associate" do
+  Associator.associate
 end
 
 desc 'Retrieves the current schema version number'
 task "db:version" do
   puts "Current version: #{ActiveRecord::Migrator.current_version}"
+end
+
+desc 'drop db, create db, db migrate, db populate'
+task "db:reset" => ["db:drop", "db:create", "db:migrate", "db:populate", "db:associate"] do
+  puts "directory dropped, created, migrated and populated and associated"
 end
 
 desc "Run the specs"
